@@ -1,0 +1,58 @@
+.form-box {
+    background: white;
+    padding: 25px;
+    width: 45%;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.form-box label {
+    font-weight: bold;
+    margin-top: 15px;
+    display: block;
+}
+
+.form-box input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.btn {
+    background: #1abc9c;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    margin-top: 20px;
+    display: inline-block;
+}
+.image-section {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-pic {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #ddd;
+}
+
+.upload-btn {
+    display: inline-block;
+    margin-top: 10px;
+    background: #2980b9;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.upload-btn:hover {
+    background: #1f6391;
+}
+

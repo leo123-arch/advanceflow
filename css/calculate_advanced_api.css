@@ -1,0 +1,95 @@
+/* ------------ GLOBAL STYLES ------------ */
+body {
+    margin: 0;
+    padding: 0;
+    background: #f4f6f9;
+    font-family: Arial, sans-serif;
+}
+
+/* ------------ MAIN CONTENT ------------ */
+.main {
+    margin-left: 250px; /* Adjust if you have a sidebar */
+    padding: 30px;
+}
+
+.main h1 {
+    color: #2c3e50;
+    font-size: 32px;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+/* ------------ RESULT CARD ------------ */
+.card {
+    background: white;
+    padding: 30px;
+    width: 45%;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    margin-bottom: 25px;
+}
+
+.card h2 {
+    font-size: 36px;
+    color: #1abc9c;
+    margin-bottom: 10px;
+}
+
+.card h3 {
+    font-size: 22px;
+    color: #34495e;
+    margin-top: 5px;
+}
+
+/* ------------ CATEGORY BREAKDOWN ------------ */
+h2 {
+    color: #2c3e50;
+    margin-bottom: 12px;
+}
+
+ul {
+    background: white;
+    padding: 20px;
+    width: 45%;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    list-style-type: none;
+}
+
+ul li {
+    font-size: 18px;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+ul li:last-child {
+    border-bottom: none;
+}
+
+/* ------------ BUTTON ------------ */
+.btn {
+    display: inline-block;
+    padding: 12px 20px;
+    background: #1abc9c;
+    color: white;
+    font-size: 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    margin-top: 20px;
+    transition: 0.3s ease;
+}
+
+.btn:hover {
+    background: #16a085;
+}
+
+/* ------------ RESPONSIVE DESIGN ------------ */
+@media screen and (max-width: 900px) {
+    .main {
+        margin-left: 0;
+    }
+    .card, ul {
+        width: 95%;
+    }
+}

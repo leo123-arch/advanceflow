@@ -1,0 +1,95 @@
+/* -------- PAGE LAYOUT -------- */
+body {
+    margin: 0;
+    padding: 0;
+    background: #f4f6f9;
+    font-family: Arial, sans-serif;
+}
+
+.main {
+    margin-left: 250px; /* If you have a sidebar */
+    padding: 30px;
+}
+
+.main h1 {
+    color: #2c3e50;
+    margin-bottom: 25px;
+    font-size: 32px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+
+/* -------- FORM BOX -------- */
+.form-box {
+    background: white;
+    width: 50%;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+}
+
+.form-box h2 {
+    color: #1abc9c;
+    border-left: 6px solid #1abc9c;
+    padding-left: 10px;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+
+/* -------- INPUT FIELDS -------- */
+label {
+    font-weight: bold;
+    display: block;
+    margin: 12px 0 5px 0;
+    color: #2c3e50;
+}
+
+input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-size: 15px;
+    background: #fafafa;
+    transition: 0.2s;
+}
+
+input[type="number"]:focus {
+    border-color: #1abc9c;
+    box-shadow: 0 0 5px rgba(26, 188, 156, 0.5);
+    background: #fff;
+}
+
+
+/* -------- SUBMIT BUTTON -------- */
+.btn {
+    background: #1abc9c;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+    font-size: 16px;
+    transition: 0.3s ease;
+}
+
+.btn:hover {
+    background: #16a085;
+}
+
+
+/* -------- RESPONSIVE DESIGN -------- */
+@media (max-width: 900px) {
+    .form-box {
+        width: 90%;
+    }
+    .main {
+        margin-left: 0;
+        padding: 20px;
+    }
+}

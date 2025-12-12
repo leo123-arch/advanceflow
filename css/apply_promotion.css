@@ -1,0 +1,21 @@
+
+        .form-box {
+            background: white;
+            padding: 30px;
+            width: 50%;
+            margin: 20px auto;
+            border-radius: 12px;
+            box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+        }
+
+        label { font-weight: bold; display: block; margin-top: 10px; }
+        input, textarea, select {
+            width: 100%; padding: 12px; border-radius: 8px;
+            border: 1px solid #ccc; margin-top: 5px;
+        }
+
+        .btn {
+            background: #1abc9c; padding: 12px 18px;
+            color: white; border-radius: 8px;
+            border: none; cursor: pointer; margin-top: 15px;
+        }
