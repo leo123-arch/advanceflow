@@ -63,6 +63,13 @@ $name = $user['name'];
     <a class="btn" href="faculty_research_upload.php">Open</a>
 </div>
 
+<div class="card">
+    <h3>AI Chatbot</h3>
+    <p>Ask questions about promotion & API score</p>
+    <a class="btn" href="faculty_chatbot.php">Open</a>
+</div>
+
+
     </div>
 </div>
 
