@@ -1,0 +1,116 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Page background */
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f2f4f7;
+    padding: 30px;
+}
+
+/* Resume container */
+.resume {
+    max-width: 900px;
+    margin: auto;
+    background: #ffffff;
+    padding: 40px 50px;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* Name */
+.resume h1 {
+    font-size: 32px;
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* Basic info */
+.resume p {
+    font-size: 15px;
+    color: #555;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+/* Horizontal line */
+.resume hr {
+    border: none;
+    height: 1px;
+    background: #ddd;
+    margin: 25px 0;
+}
+
+/* Section headings */
+.resume h2 {
+    font-size: 20px;
+    color: #1abc9c;
+    margin-top: 25px;
+    margin-bottom: 10px;
+    border-left: 5px solid #1abc9c;
+    padding-left: 10px;
+}
+
+/* Paragraph text */
+.resume p,
+.resume li {
+    font-size: 15px;
+    color: #333;
+    line-height: 1.7;
+}
+
+/* Lists */
+.resume ul {
+    margin-left: 30px;
+    margin-top: 8px;
+}
+
+.resume ul li {
+    margin-bottom: 6px;
+}
+
+/* Download button */
+.btn {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 12px 25px;
+    background: #1abc9c;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: bold;
+    transition: 0.3s ease;
+}
+
+.btn:hover {
+    background: #16a085;
+}
+
+/* Center button */
+.resume .btn {
+    display: block;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .resume {
+        padding: 25px;
+    }
+
+    .resume h1 {
+        font-size: 26px;
+    }
+
+    .resume h2 {
+        font-size: 18px;
+    }
+}
