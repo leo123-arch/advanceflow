@@ -29,6 +29,7 @@ $name = $user['name'];
     <a href="apply_promotion.php">Apply for Promotion</a>
     <a href="advanced_api_form.php" class="btn">Advanced API Score</a>
     <a href="faculty_research_upload.php">Research Contributions</a>
+    <a href="generate_resume.php">Resume Builder</a>
     <a href="logout.php">Logout</a>
 </div>
 
