@@ -51,7 +51,7 @@ if(isset($_POST['login'])){
         $_SESSION['role'] = $row['role'];
 
         if($row['role'] == "admin"){
-            header("Location: admin_dashboard.php");
+            header("Location: ./admin/admin_dashboard.php");
         } else {
             header("Location: faculty_dashboard.php");
         }
