@@ -26,10 +26,9 @@ $name = $user['name'];
 <div class="sidebar">
     <h2>Career System</h2>
     <a href="faculty_dashboard.php">Dashboard</a>
-    <a href="apply_promotion.php">Apply for Promotion</a>
     <a href="advanced_api_form.php" class="btn">Advanced API Score</a>
-    <a href="faculty_research_upload.php">Research Contributions</a>
     <a href="generate_resume.php">Resume Builder</a>
+    <a href="faculty_research_analytics.php">Analytics</a>
     <a href="logout.php">Logout</a>
 </div>
 
@@ -70,9 +69,9 @@ $name = $user['name'];
     <a class="btn" href="faculty_chatbot.php">Open</a>
 </div>
 
-
-    </div>
 </div>
-
+</div>
 </body>
+
+
 </html>

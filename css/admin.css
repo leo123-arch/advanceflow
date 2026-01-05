@@ -138,3 +138,32 @@ h1 {
 .badge.rejected {
     background: #e74c3c;
 }
+.table {
+    width: 95%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background: #fff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.table th {
+    background: #1abc9c;
+    color: #fff;
+    padding: 12px;
+    text-align: left;
+}
+
+.table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.table tr:hover {
+    background: #f9f9f9;
+}
+
+.table a {
+    color: #1abc9c;
+    font-weight: bold;
+    text-decoration: none;
+}
