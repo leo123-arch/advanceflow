@@ -28,6 +28,7 @@ $rejected  = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) AS c FROM p
     <a href="admin_promotion_request.php">Promotion Applications</a>
     <a href="admin_password_requests.php">Password Requests</a>
     <a href="admin_research_uploads.php">Research Documents</a>
+    <a href="admin_faculty_ranking.php">Faculty Ranking</a>
     <a href="logout.php">Logout</a>
 </div>
 

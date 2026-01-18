@@ -1,0 +1,114 @@
+/* --------------------
+   GLOBAL STYLES
+-------------------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+}
+
+body {
+    background: #f4f6f9;
+    color: #333;
+}
+
+/* --------------------
+   MAIN CONTAINER
+-------------------- */
+.main {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 25px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+/* --------------------
+   PAGE TITLE
+-------------------- */
+.main h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #1e3a8a;
+    font-weight: 600;
+}
+
+/* --------------------
+   TABLE STYLING
+-------------------- */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+/* Table Head */
+.table th {
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    color: #ffffff;
+    padding: 14px 10px;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Table Body */
+.table td {
+    padding: 12px 10px;
+    text-align: center;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 14px;
+}
+
+/* Zebra rows */
+.table tr:nth-child(even) {
+    background: #f9fafb;
+}
+
+/* Hover effect */
+.table tr:hover {
+    background: #eef2ff;
+    transition: 0.3s;
+}
+
+/* --------------------
+   RANK COLUMN
+-------------------- */
+.table td:first-child {
+    font-weight: bold;
+    color: #2563eb;
+}
+
+/* --------------------
+   AI SCORE HIGHLIGHT
+-------------------- */
+.table td b {
+    background: #dcfce7;
+    color: #166534;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+/* --------------------
+   RESPONSIVE DESIGN
+-------------------- */
+@media (max-width: 768px) {
+
+    .main {
+        margin: 15px;
+        padding: 15px;
+    }
+
+    .table th, .table td {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .main h1 {
+        font-size: 20px;
+    }
+}
