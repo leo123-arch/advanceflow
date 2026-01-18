@@ -28,7 +28,7 @@ $name = $user['name'];
     <a href="faculty_dashboard.php">Dashboard</a>
     <a href="advanced_api_form.php" class="btn">Advanced API Score</a>
     <a href="generate_resume.php">Resume Builder</a>
-    <a href="faculty_research_analytics.php">Analytics</a>
+    <a href="teaching_form.php">Teaching Activities</a>
     <a href="logout.php">Logout</a>
 </div>
 

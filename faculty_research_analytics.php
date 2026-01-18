@@ -4,15 +4,19 @@ include "config.php";
 
 if(!isset($_SESSION['faculty_id'])){
     header("Location: login.php");
+    exit;
 }
 
 $faculty_id = $_SESSION['faculty_id'];
 
-// Count research by category
+/* ==============================
+   COUNT RESEARCH BY CATEGORY
+============================== */
 $data = [
     "Paper" => 0,
     "Book" => 0,
     "Conference" => 0,
+    "Patent" => 0,
     "Project" => 0
 ];
 
@@ -24,9 +28,12 @@ $result = mysqli_query($conn,
 );
 
 while($row = mysqli_fetch_assoc($result)){
-    $data[$row['category']] = (int)$row['total'];
+    if(isset($data[$row['category']])){
+        $data[$row['category']] = (int)$row['total'];
+    }
 }
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -35,32 +42,32 @@ while($row = mysqli_fetch_assoc($result)){
     <link rel="stylesheet" href="./css/dashboard.css">
 </head>
 <body>
+
+<!-- Sidebar -->
 <div class="sidebar">
     <h2>Career System</h2>
     <a href="faculty_dashboard.php">Dashboard</a>
-    <a href="advanced_api_form.php" class="btn">Advanced API Score</a>
+    <a href="advanced_api_form.php">Advanced API Score</a>
     <a href="generate_resume.php">Resume Builder</a>
-    <a href="faculty_research_analytics.php">Analytics</a>
+    <a href="faculty_research_analytics.php" class="active">Analytics</a>
     <a href="logout.php">Logout</a>
 </div>
 
-
-</div>
-
+<!-- Main Content -->
 <div class="main">
     <h1>📊 Research Analytics Dashboard</h1>
 
-    <!-- Summary cards -->
+    <!-- Summary Cards -->
     <div class="cards">
         <?php foreach($data as $type => $count){ ?>
             <div class="card">
-                <h3><?php echo $type; ?></h3>
+                <h3><?php echo htmlspecialchars($type); ?></h3>
                 <p><?php echo $count; ?></p>
             </div>
         <?php } ?>
     </div>
 
-    <!-- Graph Section -->
+    <!-- Graph -->
     <div style="width:80%; margin:40px auto;">
         <canvas id="researchChart"></canvas>
     </div>
@@ -69,7 +76,7 @@ while($row = mysqli_fetch_assoc($result)){
 <script>
 const ctx = document.getElementById('researchChart').getContext('2d');
 
-const researchChart = new Chart(ctx, {
+new Chart(ctx, {
     type: 'bar',
     data: {
         labels: ['Papers', 'Books', 'Conferences', 'Patents', 'Projects'],
@@ -79,6 +86,7 @@ const researchChart = new Chart(ctx, {
                 <?php echo $data['Paper']; ?>,
                 <?php echo $data['Book']; ?>,
                 <?php echo $data['Conference']; ?>,
+                <?php echo $data['Patent']; ?>,
                 <?php echo $data['Project']; ?>
             ],
             backgroundColor: [
@@ -99,7 +107,9 @@ const researchChart = new Chart(ctx, {
         scales: {
             y: {
                 beginAtZero: true,
-                ticks: { stepSize: 1 }
+                ticks: {
+                    stepSize: 1
+                }
             }
         }
     }

@@ -18,6 +18,7 @@ if(!isset($_SESSION['faculty_id'])){
     <a href="faculty_dashboard.php">Dashboard</a>
     <a href="faculty_research_upload.php">Upload Research</a>
     <a href="view_research_uploads.php">View Uploaded Research</a>
+    <a href="faculty_research_analytics.php">Analytics</a>
     <a href="logout.php">Logout</a>
 </div>
 
