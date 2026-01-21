@@ -69,6 +69,12 @@ $name = $user['name'];
     <a class="btn" href="faculty_chatbot.php">Open</a>
 </div>
 
+<div class="card">
+    <h3>Exam Assistant</h3>
+    <p>Ask questions for </p>
+    <a class="btn" href="exam_assistant.html">Open</a>
+</div>
+
 </div>
 </div>
 </body>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Exam Assistant</title>
+    <link rel="stylesheet" href="./css/exam.css">
+</head>
+<body>
+
+<div class="container">
+
+    <h2>📘 AI Exam Assistant</h2>
+
+    <!-- Upload PDF -->
+    <label><b>Upload Study Material (PDF)</b></label>
+    <input type="file" id="pdf" accept=".pdf">
+    <button onclick="uploadPDF()">📤 Upload PDF</button>
+
+    <p id="uploadStatus"></p>
+
+    <hr>
+
+    <!-- Ask Question -->
+    <label><b>Ask a Question</b></label>
+    <input type="text" id="question" placeholder="Enter your question here">
+    <button onclick="ask()">🤖 Ask AI</button>
+
+    <p><b>Answer:</b></p>
+    <div id="answer">Your answer will appear here...</div>
+
+    <hr>
+
+    <!-- Download PDF -->
+    <button onclick="downloadPDF()">📄 Download Q&A PDF</button>
+
+</div>
+
+<script>
+function uploadPDF(){
+    const fileInput = document.getElementById("pdf");
+    if (fileInput.files.length === 0) {
+        alert("Please select a PDF file");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("pdf", fileInput.files[0]);
+
+    document.getElementById("uploadStatus").innerText = "Uploading PDF...";
+
+    fetch("http://localhost:5000/upload", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("uploadStatus").innerText =
+            data.status || data.error;
+    })
+    .catch(() => {
+        document.getElementById("uploadStatus").innerText = "Upload failed";
+    });
+}
+
+function ask(){
+    const question = document.getElementById("question").value.trim();
+    if (question === "") {
+        alert("Please enter a question");
+        return;
+    }
+
+    document.getElementById("answer").innerText = "AI is thinking... 🤔";
+
+    fetch("http://localhost:5000/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question })
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("answer").innerText =
+            data.answer || "No relevant answer found.";
+    })
+    .catch(() => {
+        document.getElementById("answer").innerText = "Error getting answer";
+    });
+}
+
+function downloadPDF(){
+    window.location.href = "http://localhost:5000/generate_pdf";
+}
+</script>
+
+</body>
+</html>
