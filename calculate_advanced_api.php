@@ -4,24 +4,11 @@ include "config.php";
 
 if(!isset($_SESSION['faculty_id'])){
     header("Location: login.php");
-<<<<<<< HEAD
-=======
     exit();
->>>>>>> 90e527b (Initial commit)
 }
 
 $faculty_id = $_SESSION['faculty_id'];
 
-<<<<<<< HEAD
-/* ----------------------
-   CATEGORY I: TEACHING
-------------------------*/
-$teaching_hours = $_POST['teaching_hours'];
-$feedback       = $_POST['feedback'];
-$mentorship     = $_POST['mentorship'];
-
-$cat1 = ($teaching_hours * 2) + ($feedback * 5) + ($mentorship * 3);
-=======
 // Fetch faculty details
 $faculty_query = mysqli_query($conn, "SELECT name, email FROM faculty WHERE id='$faculty_id'");
 $faculty_data = mysqli_fetch_assoc($faculty_query);
@@ -45,19 +32,11 @@ $teaching_score = $teaching_hours * 2;
 $feedback_score = $feedback * 5;
 $mentorship_score = $mentorship * 3;
 $cat1 = $teaching_score + $feedback_score + $mentorship_score;
->>>>>>> 90e527b (Initial commit)
 
 
 /* ----------------------
    CATEGORY II: CO-CURRICULAR
 ------------------------*/
-<<<<<<< HEAD
-$extension = $_POST['extension'];
-$pdp       = $_POST['pdp'];
-$admin     = $_POST['admin'];
-
-$cat2 = ($extension * 4) + ($pdp * 6) + ($admin * 5);
-=======
 $extension = isset($_POST['extension']) ? intval($_POST['extension']) : 0;
 $pdp       = isset($_POST['pdp']) ? intval($_POST['pdp']) : 0;
 $admin     = isset($_POST['admin']) ? intval($_POST['admin']) : 0;
@@ -66,21 +45,11 @@ $extension_score = $extension * 4;
 $pdp_score = $pdp * 6;
 $admin_score = $admin * 5;
 $cat2 = $extension_score + $pdp_score + $admin_score;
->>>>>>> 90e527b (Initial commit)
 
 
 /* ----------------------
    CATEGORY III: RESEARCH
 ------------------------*/
-<<<<<<< HEAD
-$papers     = $_POST['papers'];
-$books      = $_POST['books'];
-$conference = $_POST['conference'];
-$patents    = $_POST['patents'];
-$projects   = $_POST['projects'];
-
-$cat3 = ($papers * 10) + ($books * 15) + ($conference * 8) + ($patents * 20) + ($projects * 25);
-=======
 $papers     = isset($_POST['papers']) ? intval($_POST['papers']) : 0;
 $books      = isset($_POST['books']) ? intval($_POST['books']) : 0;
 $conference = isset($_POST['conference']) ? intval($_POST['conference']) : 0;
@@ -93,7 +62,6 @@ $conference_score = $conference * 8;
 $patents_score = $patents * 20;
 $projects_score = $projects * 25;
 $cat3 = $papers_score + $books_score + $conference_score + $patents_score + $projects_score;
->>>>>>> 90e527b (Initial commit)
 
 
 /* ----------------------
@@ -101,8 +69,6 @@ $cat3 = $papers_score + $books_score + $conference_score + $patents_score + $pro
 ------------------------*/
 $total_score = $cat1 + $cat2 + $cat3;
 
-<<<<<<< HEAD
-=======
 // Calculate percentages
 $total_for_percent = $cat1 + $cat2 + $cat3;
 if ($total_for_percent > 0) {
@@ -113,14 +79,11 @@ if ($total_for_percent > 0) {
     $cat1_percent = $cat2_percent = $cat3_percent = 0;
 }
 
->>>>>>> 90e527b (Initial commit)
 
 /* ----------------------
    ELIGIBILITY CHECK
 ------------------------*/
 $eligibility = ($total_score >= 80) ? "Eligible for Promotion" : "Not Eligible";
-<<<<<<< HEAD
-=======
 $eligibility_class = ($total_score >= 80) ? "eligible" : "not-eligible";
 $promotion_status = ($total_score >= 80) ? "Ready to Apply" : "Needs Improvement";
 
@@ -141,18 +104,11 @@ if ($total_score >= 90) {
     $promotion_level = "Poor - Significant Improvement Needed";
     $promotion_color = "#ff4757";
 }
->>>>>>> 90e527b (Initial commit)
 
 
 /* ----------------------
    SAVE RESULTS (Advanced API Score)
 ------------------------*/
-<<<<<<< HEAD
-mysqli_query($conn,
-    "INSERT INTO promotion_applications (faculty_id, api_score, cat1, cat2, cat3, status)
-     VALUES('$faculty_id', '$total_score', '$cat1', '$cat2', '$cat3', 'Pending')");
-
-=======
 // First, let's check if the table exists and what columns it has
 $table_check = mysqli_query($conn, "SHOW COLUMNS FROM promotion_applications");
 $columns = [];
@@ -187,40 +143,10 @@ if ($insert_query) {
     // Log error but don't stop execution
     error_log("Failed to insert API score: " . mysqli_error($conn));
 }
->>>>>>> 90e527b (Initial commit)
 
 ?>
 
 <!DOCTYPE html>
-<<<<<<< HEAD
-<html>
-<head>
-    <title>API Score Result</title>
-   <link rel="stylesheet" href="./css/calculate_advanced_api.css">
-</head>
-<body>
-
-<div class="main">
-    <h1>Advanced API Score Result</h1>
-
-    <div class="card">
-        <h2>Total API Score: <?php echo $total_score; ?></h2>
-        <h3><?php echo $eligibility; ?></h3>
-    </div>
-
-    <h2>Category Breakdown</h2>
-    <ul>
-        <li><b>Category I:</b> <?php echo $cat1; ?></li>
-        <li><b>Category II:</b> <?php echo $cat2; ?></li>
-        <li><b>Category III:</b> <?php echo $cat3; ?></li>
-    </ul>
-
-    <a class="btn" href="faculty_dashboard.php">Back to Dashboard</a>
-</div>
-
-</body>
-</html>
-=======
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -969,4 +895,3 @@ if ($insert_query) {
     </script>
 </body>
 </html>
->>>>>>> 90e527b (Initial commit)
