@@ -104,7 +104,7 @@ body {
     font-size: 18px;
 }
 
-.btn {
+/* .btn {
     width: 100%;
     padding: 16px;
     background: linear-gradient(to right, #6a11cb, #2575fc);
@@ -117,14 +117,14 @@ body {
     transition: all 0.3s;
     margin-top: 10px;
     letter-spacing: 0.5px;
-}
+} */
 
 .btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 7px 15px rgba(106, 17, 203, 0.3);
 }
 
-.btn1 {
+/* .btn1 {
     display: block;
     width: 100%;
     padding: 16px;
@@ -140,7 +140,7 @@ body {
     text-align: center;
     text-decoration: none;
     letter-spacing: 0.5px;
-}
+} */
 
 .btn1:hover {
     background-color: rgba(37, 117, 252, 0.1);

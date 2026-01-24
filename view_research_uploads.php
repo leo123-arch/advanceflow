@@ -578,12 +578,7 @@ $patent_count = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM research_uplo
             <a href="faculty_research_upload.php">
                 <i class="fas fa-plus-circle"></i> New Upload
             </a>
-            <a href="faculty_dashboard.php">
-                <i class="fas fa-chart-line"></i> API Score
-            </a>
-            <a href="logout.php">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
+          
         </div>
 
         <div class="sidebar-footer">
