@@ -4,89 +4,11 @@ include "config.php";
 
 if(!isset($_SESSION['faculty_id'])){
     header("Location: login.php");
-<<<<<<< HEAD
-=======
     exit();
->>>>>>> 90e527b (Initial commit)
 }
 
 $faculty_id = $_SESSION['faculty_id'];
 
-<<<<<<< HEAD
-// Fetch faculty details
-$query = mysqli_query($conn, "SELECT name FROM faculty WHERE id='$faculty_id'");
-$user = mysqli_fetch_assoc($query);
-$name = $user['name'];
-?>
-
-
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Faculty Dashboard</title>
-    <link rel="stylesheet" href="./css/dashboard.css">
-</head>
-<body>
-
-<div class="sidebar">
-    <h2>Career System</h2>
-    <a href="faculty_dashboard.php">Dashboard</a>
-    <a href="advanced_api_form.php" class="btn">Advanced API Score</a>
-    <a href="generate_resume.php">Resume Builder</a>
-    <a href="teaching_form.php">Teaching Activities</a>
-    <a href="logout.php">Logout</a>
-</div>
-
-<div class="main">
-    <div class="topbar">
-        <h1>Welcome Faculty <?php echo $name;?></h1>
-    </div>
-
-    <div class="cards">
-
-        <div class="card">
-            <h3>Apply for Promotion</h3>
-            <p>Submit new promotion request</p>
-            <a href="apply_promotion.php" class="btn">Apply</a>
-        </div>
-
-        <div class="card">
-            <h3>Check Status</h3>
-            <p>View your application status</p>
-            <a href="promotion_status.php" class="btn">View</a>
-        </div>
-
-        <div class="card">
-            <h3>Your Profile</h3>
-            <p>Edit personal details</p>
-            <a href="edit_profile.php" class="btn">Open</a>
-        </div>
-
-        <div class="card">
-    <h3>Research Contributions</h3>
-    <p>Add & View Research Work</p>
-    <a class="btn" href="faculty_research_upload.php">Open</a>
-</div>
-
-<div class="card">
-    <h3>AI Chatbot</h3>
-    <p>Ask questions about promotion & API score</p>
-    <a class="btn" href="faculty_chatbot.php">Open</a>
-</div>
-
-<div class="card">
-    <h3>Exam Assistant</h3>
-    <p>Ask questions for </p>
-    <a class="btn" href="exam_assistant.html">Open</a>
-</div>
-
-</div>
-</div>
-</body>
-
-
-</html>
-=======
 // Fetch faculty details (without profile_pic column)
 $query = mysqli_query($conn, "SELECT name, role, email FROM faculty WHERE id='$faculty_id'");
 $user = mysqli_fetch_assoc($query);
@@ -1140,4 +1062,3 @@ if ($last_calculated != "Never" && $last_calculated != "0000-00-00 00:00:00") {
     </script>
 </body>
 </html>
->>>>>>> 90e527b (Initial commit)

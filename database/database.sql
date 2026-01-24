@@ -55,6 +55,9 @@ CREATE TABLE `faculty` (
   `qualification` varchar(100) DEFAULT NULL,
   `department` varchar(100) DEFAULT NULL,
   `experience` int(11) DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `address` text DEFAULT NULL,
+  `biography` text DEFAULT NULL,
   `role` varchar(20) DEFAULT 'faculty',
   `profile_image` varchar(255) DEFAULT 'default_avatar.png'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

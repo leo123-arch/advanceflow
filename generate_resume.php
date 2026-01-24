@@ -4,29 +4,22 @@ include "config.php";
 
 if(!isset($_SESSION['faculty_id'])){
     header("Location: login.php");
-<<<<<<< HEAD
-=======
     exit();
->>>>>>> 90e527b (Initial commit)
 }
 
 $faculty_id = $_SESSION['faculty_id'];
 
 // Fetch faculty data
-<<<<<<< HEAD
-$f = mysqli_fetch_assoc(mysqli_query($conn,
-    "SELECT * FROM faculty WHERE id='$faculty_id'"
-));
-
-// Research stats
-$research = mysqli_fetch_assoc(mysqli_query($conn,
-=======
 $faculty_query = mysqli_query($conn, "SELECT * FROM faculty WHERE id='$faculty_id'");
 $faculty = mysqli_fetch_assoc($faculty_query);
 
+if(!$faculty) {
+    header("Location: login.php");
+    exit();
+}
+
 // Research stats
 $research_stats = mysqli_fetch_assoc(mysqli_query($conn,
->>>>>>> 90e527b (Initial commit)
     "SELECT 
         SUM(category='Paper') AS papers,
         SUM(category='Book') AS books,
@@ -36,74 +29,11 @@ $research_stats = mysqli_fetch_assoc(mysqli_query($conn,
      WHERE faculty_id='$faculty_id'"
 ));
 
-<<<<<<< HEAD
-// API score
-$api = mysqli_fetch_assoc(mysqli_query($conn,
-    "SELECT api_score FROM promotion_applications 
-     WHERE faculty_id='$faculty_id' 
-     ORDER BY id DESC LIMIT 1"
-));
-
-// ---------------- AI SUMMARY LOGIC ----------------
-$summary = "Dedicated academic professional with ";
-
-if($research['papers'] >= 5){
-    $summary .= "a strong research publication record, ";
-}
-if($research['patents'] > 0){
-    $summary .= "innovation through patents, ";
-}
-// if($api['api_score'] >= 80){
-//     $summary .= "and proven eligibility for academic promotion.";
-// } else {
-//     $summary .= "consistent academic and teaching contributions.";
-// }
-?>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>AI Generated Resume</title>
-    <link rel="stylesheet" href="./css/resume.css">
-</head>
-<body>
-
-<div class="resume">
-
-<h1><?php echo $f['name']; ?></h1>
-<p><b>Department:</b> <?php echo $f['department']; ?></p>
-<p><b>Email:</b> <?php echo $f['email']; ?></p>
-
-<hr>
-
-<h2>Professional Summary</h2>
-<p><?php echo $summary; ?></p>
-
-<h2>Academic Profile</h2>
-<ul>
-    <li>Experience: <?php echo $f['experience']; ?> years</li>
-    <li>API Score: <?php echo $api['api_score'] ?? 'N/A'; ?></li>
-</ul>
-
-<h2>Research Contributions</h2>
-<ul>
-    <li>Research Papers: <?php echo $research['papers']; ?></li>
-    <li>Books / Chapters: <?php echo $research['books']; ?></li>
-    <li>Conferences: <?php echo $research['conferences']; ?></li>
-    <li>Patents: <?php echo $research['patents']; ?></li>
-</ul>
-
-<a href="resume_pdf.php" class="btn">Download PDF</a>
-
-</div>
-
-</body>
-</html>
-=======
-// Fetch individual research items (checking available columns)
+// Fetch individual research items
 $research_items_query = mysqli_query($conn,
     "SELECT * FROM research_uploads 
      WHERE faculty_id='$faculty_id' 
-     ORDER BY id DESC"  // Changed from upload_date to id
+     ORDER BY id DESC"
 );
 $research_items = [];
 while($row = mysqli_fetch_assoc($research_items_query)) {
@@ -119,7 +49,7 @@ $api_score_result = mysqli_query($conn,
 );
 $api_score_data = mysqli_fetch_assoc($api_score_result);
 
-// Teaching activities count (check if table exists)
+// Teaching activities count
 $teaching_activities = 0;
 $teaching_table_check = mysqli_query($conn, "SHOW TABLES LIKE 'teaching_activities'");
 if(mysqli_num_rows($teaching_table_check) > 0) {
@@ -136,7 +66,8 @@ $promotion_status_result = mysqli_query($conn,
      WHERE faculty_id='$faculty_id' 
      ORDER BY id DESC LIMIT 1"
 );
-$promotion_status = mysqli_fetch_assoc($promotion_status_result);
+$promotion_status_data = mysqli_fetch_assoc($promotion_status_result);
+$promotion_status = $promotion_status_data['status'] ?? 'Not Applied';
 
 // ---------------- AI SUMMARY LOGIC ----------------
 function generateAISummary($faculty, $research_stats, $api_score_data, $teaching_activities) {
@@ -605,6 +536,28 @@ $strengths = calculateStrengths($faculty, $research_stats, $api_score_data);
             margin-bottom: 10px;
         }
 
+        /* Promotion Status */
+        .promotion-status {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .status-label {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+
+        .status-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
         /* Action Buttons */
         .action-buttons {
             display: flex;
@@ -859,6 +812,20 @@ $strengths = calculateStrengths($faculty, $research_stats, $api_score_data);
             </div>
             <?php endif; ?>
 
+            <!-- Promotion Status -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-arrow-up"></i>
+                    </div>
+                    <div class="section-title">Promotion Status</div>
+                </div>
+                <div class="promotion-status">
+                    <div class="status-label">Current Application Status</div>
+                    <div class="status-value"><?php echo ucwords($promotion_status); ?></div>
+                </div>
+            </div>
+
             <!-- Research Contributions -->
             <?php if(!empty($research_items)): ?>
             <div class="section">
@@ -877,6 +844,11 @@ $strengths = calculateStrengths($faculty, $research_stats, $api_score_data);
                         </div>
                         <?php if(!empty($research['description'])): ?>
                         <div class="research-desc"><?php echo htmlspecialchars($research['description']); ?></div>
+                        <?php endif; ?>
+                        <?php if(!empty($research['file_name'])): ?>
+                        <div class="research-meta">
+                            <small>File: <?php echo htmlspecialchars($research['file_name']); ?></small>
+                        </div>
                         <?php endif; ?>
                     </div>
                     <?php endforeach; ?>
@@ -951,4 +923,3 @@ $strengths = calculateStrengths($faculty, $research_stats, $api_score_data);
     </script>
 </body>
 </html>
->>>>>>> 90e527b (Initial commit)
