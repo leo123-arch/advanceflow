@@ -1,17 +1,11 @@
-<<<<<<< HEAD
 <?php
 // ================== PHP LOGIC (MUST BE AT TOP) ==================
-=======
-<?php 
-include "config.php"; 
->>>>>>> 3c9ca7f4e7925fe3261a82e10ffb2dcc04d3d0a3
 session_start();
 include "config.php";
 
 $error = "";
 
 if (isset($_POST['login'])) {
-
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $password = mysqli_real_escape_string($conn, $_POST['password']);
 
@@ -23,32 +17,20 @@ if (isset($_POST['login'])) {
 
         $_SESSION['faculty_id'] = $row['id'];
         $_SESSION['role'] = $row['role'];
+        $_SESSION['faculty_name'] = $row['name'];
 
         if ($row['role'] === "admin") {
             header("Location: ./admin/admin_dashboard.php");
-<<<<<<< HEAD
+            exit();
         } else {
             header("Location: faculty_dashboard.php");
+            exit();
         }
-        exit();
     } else {
         $error = "Invalid email or password. Please try again.";
     }
 }
 ?>
-=======
-            exit();
-        } else {
-            header("Location: faculty_dashboard.php");
-            exit();
-        }
-    } else {
-        $login_error = "Invalid email or password. Please try again.";
-    }
-}
-?>
-
->>>>>>> 3c9ca7f4e7925fe3261a82e10ffb2dcc04d3d0a3
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -176,6 +158,16 @@ if (isset($_POST['login'])) {
             font-size: 16px;
             cursor: pointer;
             margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
         }
 
         .btn1 {
@@ -188,6 +180,16 @@ if (isset($_POST['login'])) {
             color: #2575fc;
             text-decoration: none;
             font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn1:hover {
+            background-color: #2575fc;
+            color: white;
         }
 
         .links {
@@ -200,6 +202,11 @@ if (isset($_POST['login'])) {
         .links a {
             color: #666;
             text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .links a:hover {
+            color: #2575fc;
         }
 
         .alert {
@@ -209,6 +216,13 @@ if (isset($_POST['login'])) {
             border-radius: 8px;
             margin-bottom: 15px;
             border-left: 4px solid #d32f2f;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert i {
+            font-size: 18px;
         }
 
         .note {
@@ -217,6 +231,7 @@ if (isset($_POST['login'])) {
             background: #f8f9fa;
             padding: 10px;
             border-radius: 8px;
+            border-left: 4px solid #2575fc;
             display: none;
         }
     </style>
@@ -224,7 +239,7 @@ if (isset($_POST['login'])) {
 <body>
 
 <div class="container">
-    <form class="login-box" method="POST">
+    <form class="login-box" method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
 
         <div class="faculty-icon">
             <i class="fas fa-chalkboard-teacher"></i>
@@ -236,19 +251,22 @@ if (isset($_POST['login'])) {
         </div>
 
         <?php if (!empty($error)) { ?>
-            <div class="alert"><?php echo $error; ?></div>
+            <div class="alert">
+                <i class="fas fa-exclamation-circle"></i>
+                <?php echo htmlspecialchars($error); ?>
+            </div>
         <?php } ?>
 
         <div class="input-group">
-            <label>Email Address</label>
+            <label for="email">Email Address</label>
             <i class="fas fa-envelope"></i>
-            <input type="text" name="email" required>
+            <input type="email" id="email" name="email" required placeholder="Enter your email address">
         </div>
 
         <div class="input-group">
-            <label>Password</label>
+            <label for="password">Password</label>
             <i class="fas fa-lock"></i>
-            <input type="password" name="password" required>
+            <input type="password" id="password" name="password" required placeholder="Enter your password">
         </div>
 
         <button type="submit" name="login" class="btn">
@@ -260,12 +278,16 @@ if (isset($_POST['login'])) {
         </a>
 
         <div class="links">
-            <a href="forgot_password.php"><i class="fas fa-key"></i> Forgot Password?</a>
-            <a href="#" onclick="toggleAdminNote()">Admin Login</a>
+            <a href="forgot_password.php">
+                <i class="fas fa-key"></i> Forgot Password?
+            </a>
+            <a href="#" onclick="toggleAdminNote()">
+                <i class="fas fa-user-shield"></i> Admin Login Info
+            </a>
         </div>
 
         <div class="note" id="admin-note">
-            Admin users can login using the same form.
+            <i class="fas fa-info-circle"></i> Admin users can login using the same form with admin credentials.
         </div>
 
     </form>
@@ -274,8 +296,37 @@ if (isset($_POST['login'])) {
 <script>
 function toggleAdminNote() {
     let note = document.getElementById("admin-note");
-    note.style.display = note.style.display === "block" ? "none" : "block";
+    if (note.style.display === "block") {
+        note.style.display = "none";
+    } else {
+        note.style.display = "block";
+    }
+    return false;
 }
+
+// Add show password functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const passwordInput = document.getElementById('password');
+    const passwordGroup = document.querySelector('.input-group:nth-child(2)');
+    
+    // Add show password button
+    const showPassBtn = document.createElement('span');
+    showPassBtn.innerHTML = '<i class="fas fa-eye"></i>';
+    showPassBtn.style.position = 'absolute';
+    showPassBtn.style.right = '15px';
+    showPassBtn.style.top = '38px';
+    showPassBtn.style.cursor = 'pointer';
+    showPassBtn.style.color = '#666';
+    showPassBtn.title = 'Show Password';
+    
+    showPassBtn.addEventListener('click', function() {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+    });
+    
+    passwordGroup.appendChild(showPassBtn);
+});
 </script>
 
 </body>
