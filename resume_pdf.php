@@ -889,4 +889,8 @@ ob_end_clean(); // Clean any previous output
         });
     </script>
 </body>
+<<<<<<< HEAD
 </html>
+=======
+</html>
+>>>>>>> 3c9ca7f4e7925fe3261a82e10ffb2dcc04d3d0a3

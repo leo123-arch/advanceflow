@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 <?php
 // ================== PHP LOGIC (MUST BE AT TOP) ==================
+=======
+<?php 
+include "config.php"; 
+>>>>>>> 3c9ca7f4e7925fe3261a82e10ffb2dcc04d3d0a3
 session_start();
 include "config.php";
 
@@ -21,6 +26,7 @@ if (isset($_POST['login'])) {
 
         if ($row['role'] === "admin") {
             header("Location: ./admin/admin_dashboard.php");
+<<<<<<< HEAD
         } else {
             header("Location: faculty_dashboard.php");
         }
@@ -30,6 +36,19 @@ if (isset($_POST['login'])) {
     }
 }
 ?>
+=======
+            exit();
+        } else {
+            header("Location: faculty_dashboard.php");
+            exit();
+        }
+    } else {
+        $login_error = "Invalid email or password. Please try again.";
+    }
+}
+?>
+
+>>>>>>> 3c9ca7f4e7925fe3261a82e10ffb2dcc04d3d0a3
 <!DOCTYPE html>
 <html lang="en">
 <head>

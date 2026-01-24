@@ -29,7 +29,11 @@ $research_stats = mysqli_fetch_assoc(mysqli_query($conn,
      WHERE faculty_id='$faculty_id'"
 ));
 
+<<<<<<< HEAD
 // Fetch individual research items
+=======
+// Fetch individual research items (checking available columns)
+>>>>>>> 3c9ca7f4e7925fe3261a82e10ffb2dcc04d3d0a3
 $research_items_query = mysqli_query($conn,
     "SELECT * FROM research_uploads 
      WHERE faculty_id='$faculty_id' 
@@ -922,4 +926,8 @@ $strengths = calculateStrengths($faculty, $research_stats, $api_score_data);
         });
     </script>
 </body>
+<<<<<<< HEAD
 </html>
+=======
+</html>
+>>>>>>> 3c9ca7f4e7925fe3261a82e10ffb2dcc04d3d0a3
