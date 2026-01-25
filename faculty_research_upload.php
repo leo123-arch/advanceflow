@@ -619,9 +619,7 @@ $faculty = mysqli_fetch_assoc($faculty_query);
             <a href="faculty_research_analytics.php">
                 <i class="fas fa-chart-bar"></i> Analytics
             </a>
-            <a href="logout.php" style="color: #ff4757;">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
+           
         </div>
 
         <div class="sidebar-footer">
