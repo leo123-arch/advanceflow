@@ -9,7 +9,7 @@ if(!isset($_SESSION['role']) || $_SESSION['role'] != "admin"){
 
 $name = mysqli_real_escape_string($conn, $_POST['name']);
 $email = mysqli_real_escape_string($conn, $_POST['email']);
-$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+$password = password_hash($_POST['password'], PASSWORD_DEFAUL);
 $department = mysqli_real_escape_string($conn, $_POST['department']);
 $qualification = mysqli_real_escape_string($conn, $_POST['qualification']);
 $experience = intval($_POST['experience']);
