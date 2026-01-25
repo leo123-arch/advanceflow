@@ -764,48 +764,7 @@ $stats = mysqli_fetch_assoc($stats_query);
             </div>
 
             <!-- Profile Container -->
-            <div class="profile-container">
-                <!-- Left Panel - Profile Card -->
-                <div class="profile-card">
-                    <div class="profile-image-container">
-                        <div class="profile-img" id="profile-preview">
-                            <?php if($profile_image && $profile_image != 'default_avatar.png'): ?>
-                                <img src="uploads/<?php echo htmlspecialchars($profile_image); ?>" 
-                                     alt="Profile" 
-                                     onerror="this.onerror=null; this.style.display='none'; document.getElementById('profile-preview').innerHTML='<?php echo strtoupper(substr($faculty_name, 0, 1)); ?>';">
-                            <?php else: ?>
-                                <?php echo strtoupper(substr($faculty_name, 0, 1)); ?>
-                            <?php endif; ?>
-                        </div>
-                        <label for="profile-image-input" class="image-upload-label">
-                            <i class="fas fa-camera"></i> Change Photo
-                        </label>
-                        <input type="file" id="profile-image-input" name="profile_image" accept="image/*" hidden>
-                    </div>
-
-                    <h3 style="font-size: 22px; color: var(--text-dark); margin-bottom: 5px;"><?php echo htmlspecialchars($faculty_name); ?></h3>
-                    <p style="color: var(--text-gray); margin-bottom: 20px; font-size: 15px;"><?php echo htmlspecialchars($user['email']); ?></p>
-
-                    <div class="profile-stats">
-                        <div class="stat-item">
-                            <div class="stat-value"><?php echo $stats['total_applications'] ?? 0; ?></div>
-                            <div class="stat-label">Applications</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value"><?php echo $stats['avg_api_score'] ? round($stats['avg_api_score'], 1) : '0'; ?></div>
-                            <div class="stat-label">Avg API Score</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value"><?php echo $user['experience'] ?? 0; ?>y</div>
-                            <div class="stat-label">Experience</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value"><?php echo date('Y') - ($user['experience'] ?? 0); ?></div>
-                            <div class="stat-label">Career Start</div>
-                        </div>
-                    </div>
-                </div>
-
+           
                 <!-- Right Panel - Edit Form -->
                 <form action="update_profile.php" method="POST" enctype="multipart/form-data" class="edit-form-card">
                     <div class="form-header">
