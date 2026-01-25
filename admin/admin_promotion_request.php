@@ -1059,9 +1059,14 @@ $recent_updates = mysqli_query($conn, "
                             </td>
                             <td>
                                 <?php if($row['document']): ?>
-                                <a href="uploads/<?php echo $row['document']; ?>" target="_blank" class="document-link">
-                                    <i class="fas fa-file-pdf"></i> View Document
-                                </a>
+        <a href="<?= '/../uploads/research/' . urlencode($row['document']) ?>" 
+   target="_blank" 
+   class="document-link">
+    <i class="fas fa-file-pdf"></i> View Document
+</a>
+
+
+
                                 <?php else: ?>
                                 <span style="color: var(--gray-text); font-size: 0.9rem;">No document</span>
                                 <?php endif; ?>
