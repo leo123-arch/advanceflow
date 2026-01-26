@@ -159,9 +159,9 @@ class EnhancedPDF extends FPDF {
     
     function addSeal() {
         // Add circular seal
-        $this->SetDrawColor($this->primaryColor[0], $this->primaryColor[1], $this->primaryColor[2]);
-        $this->SetLineWidth(2);
-        $this->Circle(105, 250, 20);
+        // $this->SetDrawColor($this->primaryColor[0], $this->primaryColor[1], $this->primaryColor[2]);
+        // $this->SetLineWidth(2);
+        // $this->Circle(105, 250, 20);
         
         $this->SetFont('Arial', 'B', 24);
         $this->SetTextColor($this->primaryColor[0], $this->primaryColor[1], $this->primaryColor[2]);

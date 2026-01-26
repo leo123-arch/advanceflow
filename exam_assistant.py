@@ -44,35 +44,60 @@ def upload_pdf():
     return jsonify({"status": "PDF uploaded successfully"})
 
 # ---------------- ASK QUESTION ----------------
-@app.route("/ask", methods=["POST", "OPTIONS"])
+@app.route("/ask", methods=["POST"])
 def ask_question():
+    global document_text, qa_history
+
     if document_text.strip() == "":
         return jsonify({"answer": "Please upload a PDF first."})
 
-    data = request.get_json(silent=True)
-    if not data or "question" not in data:
-        return jsonify({"answer": "Invalid question format."})
+    data = request.get_json()
+    question = data.get("question", "").lower()
 
-    question = data["question"]
+    # Split into sentences
+    sentences = [s.strip() for s in document_text.split(".") if len(s.strip()) > 30]
 
-    sentences = document_text.split(".")
-    if len(sentences) < 2:
-        return jsonify({"answer": "Not enough content to answer."})
+    # ---------- SUMMARIZE ----------
+    if "summary" in question or "summarize" in question:
+        summary = " ".join(sentences[:10])
+        qa_history.append({"question": question, "answer": summary})
+        return jsonify({"answer": summary})
 
+    # ---------- GENERATE QUESTIONS ----------
+    if "generate question" in question or "practice question" in question:
+        questions = []
+        for s in sentences[:20]:
+            words = s.split()
+            if len(words) > 8:
+                q = "What is meant by " + " ".join(words[:6]) + "?"
+                questions.append(q)
+
+        result = "\n".join(questions[:8])
+        qa_history.append({"question": question, "answer": result})
+        return jsonify({"answer": result})
+
+    # ---------- EXPLAIN CONCEPT ----------
+    if "explain" in question or "concept" in question:
+        vectorizer = TfidfVectorizer()
+        vectors = vectorizer.fit_transform(sentences + [question])
+        similarity = cosine_similarity(vectors[-1], vectors[:-1])
+        top_indexes = similarity.argsort()[0][-5:]
+
+        explanation = " ".join([sentences[i] for i in top_indexes])
+        qa_history.append({"question": question, "answer": explanation})
+        return jsonify({"answer": explanation})
+
+    # ---------- NORMAL QUESTION ANSWER ----------
     vectorizer = TfidfVectorizer()
     vectors = vectorizer.fit_transform(sentences + [question])
-
     similarity = cosine_similarity(vectors[-1], vectors[:-1])
     best_match = similarity.argmax()
 
-    answer = sentences[best_match].strip()
-
-    qa_history.append({
-        "question": question,
-        "answer": answer
-    })
+    answer = sentences[best_match]
+    qa_history.append({"question": question, "answer": answer})
 
     return jsonify({"answer": answer})
+
 
 # ---------------- GENERATE PDF ----------------
 @app.route("/generate_pdf", methods=["GET"])

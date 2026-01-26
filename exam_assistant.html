@@ -1016,80 +1016,73 @@
         }
 
         // Upload PDF
-        function uploadPDF() {
-            if (!currentPDF) {
-                showUploadStatus('Please select a PDF file first', 'error');
-                return;
-            }
+function uploadPDF() {
+    if (!currentPDF) {
+        showUploadStatus('Please select a PDF file first', 'error');
+        return;
+    }
 
-            showUploadStatus('Uploading PDF...', 'info');
-            
-            const formData = new FormData();
-            formData.append("pdf", currentPDF);
+    showUploadStatus('Uploading PDF...', 'info');
 
-            // Simulate API call (replace with actual fetch)
-            setTimeout(() => {
-                showUploadStatus('PDF uploaded successfully! AI is ready to answer questions.', 'success');
-                addMessage('bot', `I've analyzed "${currentPDF.name}". You can now ask questions about this document!`, true);
-            }, 1500);
-            
-            // Actual fetch code (uncomment and configure):
-            /*
-            fetch("http://localhost:5000/upload", {
-                method: "POST",
-                body: formData
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    showUploadStatus('PDF uploaded successfully!', 'success');
-                    addMessage('bot', `I've analyzed "${currentPDF.name}". Ask me questions!`, true);
-                } else {
-                    showUploadStatus(data.error || 'Upload failed', 'error');
-                }
-            })
-            .catch(error => {
-                showUploadStatus('Upload failed. Please try again.', 'error');
-                console.error('Error:', error);
-            });
-            */
+    const formData = new FormData();
+    formData.append("pdf", currentPDF);
+
+    fetch("http://127.0.0.1:5000/upload", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.error) {
+            showUploadStatus(data.error, 'error');
+            return;
         }
+
+        showUploadStatus(data.status, 'success');
+        addMessage('bot', "✅ PDF processed successfully. Now ask questions from it!", true);
+    })
+    .catch(err => {
+        showUploadStatus('Server error while uploading PDF', 'error');
+        console.error(err);
+    });
+}
+
+
 
         // Ask question
-        function askQuestion() {
-            const questionInput = document.getElementById('question');
-            const question = questionInput.value.trim();
-            
-            if (!question) return;
-            
-            // Add user message
-            addMessage('user', question, false);
-            questionInput.value = '';
-            
-            // Show typing indicator
-            showTyping();
-            
-            // Simulate AI response (replace with actual API call)
-            setTimeout(() => {
-                removeTyping();
-                
-                // Sample responses based on question type
-                let response = '';
-                const lowerQuestion = question.toLowerCase();
-                
-                if (lowerQuestion.includes('summary') || lowerQuestion.includes('summarize')) {
-                    response = "Based on the document, here are the key points:\n\n1. **Main Topic**: [Extracted from PDF]\n2. **Key Concepts**: [List from PDF]\n3. **Important Formulas/Theorems**: [If applicable]\n4. **Practical Applications**: [If mentioned]\n\nFor a more detailed summary, ensure your PDF is properly uploaded and try asking specific questions about sections.";
-                } else if (lowerQuestion.includes('practice') || lowerQuestion.includes('question')) {
-                    response = "Here are some practice questions based on the material:\n\n1. **Question 1**: [Generated from content]\n2. **Question 2**: [Generated from content]\n3. **Question 3**: [Generated from content]\n\n*Note: For context-specific questions, please ensure the PDF contains relevant content.*";
-                } else if (lowerQuestion.includes('explain') || lowerQuestion.includes('concept')) {
-                    response = "I'll explain the main concepts from your document:\n\n• **Concept 1**: Explanation based on uploaded material\n• **Concept 2**: Detailed breakdown with examples\n• **Concept 3**: Applications and importance\n\nFor accurate explanations, make sure your study material is properly uploaded.";
-                } else {
-                    response = "I'm analyzing your question against the uploaded document. For precise answers, please ensure:\n\n1. The PDF has been uploaded successfully\n2. Your question relates to the document content\n3. The document contains relevant information\n\nYou can also ask me to:\n- Generate a study guide\n- Create flashcards\n- Explain complex topics\n- Summarize chapters";
-                }
-                
-                addMessage('bot', response, true);
-            }, 1500);
+   function askQuestion() {
+    const questionInput = document.getElementById('question');
+    const question = questionInput.value.trim();
+
+    if (!question) return;
+
+    addMessage('user', question, false);
+    questionInput.value = '';
+    showTyping();
+
+    fetch("http://127.0.0.1:5000/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question: question })
+    })
+    .then(res => res.json())
+    .then(data => {
+        removeTyping();
+
+        if (data.answer) {
+            addMessage('bot', data.answer, true);
+        } else {
+            addMessage('bot', "⚠️ No answer returned. Make sure PDF is uploaded.", true);
         }
+    })
+    .catch(err => {
+        removeTyping();
+        addMessage('bot', "Error connecting to AI server.", true);
+        console.error(err);
+    });
+}
+
+
 
         // Handle Enter key
         function handleKeyPress(event) {
@@ -1105,19 +1098,10 @@
         }
 
         // Download PDF
-        function downloadPDF() {
-            if (chatHistory.length === 0) {
-                alert('No conversation to export. Start chatting first!');
-                return;
-            }
-            
-            // Simulate download
-            showUploadStatus('Generating PDF with Q&A...', 'info');
-            setTimeout(() => {
-                showUploadStatus('PDF generated successfully! Download starting...', 'success');
-                // Actual download code would go here
-            }, 2000);
-        }
+     function downloadPDF() {
+    window.open("http://127.0.0.1:5000/generate_pdf", "_blank");
+}
+
 
         // Clear chat
         function clearChat() {
