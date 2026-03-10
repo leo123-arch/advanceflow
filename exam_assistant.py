@@ -1,135 +1,214 @@
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
-import pdfplumber
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-from reportlab.lib.pagesizes import A4
-from reportlab.pdfgen import canvas
+import fitz
+import os
+import faiss
+from sentence_transformers import SentenceTransformer
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet
 
 app = Flask(__name__)
-CORS(app)   # IMPORTANT: Fixes browser blocking
+CORS(app)
 
-document_text = ""
+# ===============================
+# MODEL FOR SEARCH
+# ===============================
+
+embedder = SentenceTransformer("all-MiniLM-L6-v2")
+
+pdf_chunks = []
+index = None
 qa_history = []
 
-# ---------------- PDF UPLOAD ----------------
+UPLOAD_FOLDER = "uploads"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+# ===============================
+# EXTRACT TEXT FROM PDF
+# ===============================
+
+def extract_text_from_pdf(path):
+
+    doc = fitz.open(path)
+    text = ""
+
+    for page in doc:
+        text += page.get_text()
+
+    return text
+
+
+# ===============================
+# SPLIT TEXT INTO CHUNKS
+# ===============================
+
+def split_text(text, chunk_size=200):
+
+    words = text.split()
+    chunks = []
+
+    for i in range(0, len(words), chunk_size):
+        chunk = " ".join(words[i:i + chunk_size])
+        chunks.append(chunk)
+
+    return chunks
+
+
+# ===============================
+# CREATE VECTOR DATABASE
+# ===============================
+
+def create_vector_store(chunks):
+
+    global index
+
+    embeddings = embedder.encode(chunks)
+
+    dim = embeddings.shape[1]
+
+    index = faiss.IndexFlatL2(dim)
+    index.add(embeddings)
+
+    return index
+
+
+# ===============================
+# SEARCH ANSWER IN PDF
+# ===============================
+
+def search_pdf(question, top_k=3):
+
+    if index is None:
+        return "Please upload a PDF first."
+
+    q_embedding = embedder.encode([question])
+
+    distances, ids = index.search(q_embedding, top_k)
+
+    results = []
+
+    for i in ids[0]:
+        if i < len(pdf_chunks):
+            results.append(pdf_chunks[i])
+
+    return "\n\n".join(results)
+
+
+# ===============================
+# GENERATE QUESTIONS FROM PDF
+# ===============================
+
+def generate_questions(num_questions=5):
+
+    questions = []
+
+    if len(pdf_chunks) == 0:
+        return []
+
+    for i in range(min(num_questions, len(pdf_chunks))):
+
+        chunk = pdf_chunks[i]
+
+        question = f"What is explained in the following text?"
+
+        answer = chunk
+
+        questions.append((question, answer))
+
+    return questions
+
+
+# ===============================
+# UPLOAD PDF API
+# ===============================
+
 @app.route("/upload", methods=["POST"])
 def upload_pdf():
-    global document_text, qa_history
-    qa_history = []
+
+    global pdf_chunks
 
     if "pdf" not in request.files:
-        return jsonify({"error": "PDF file not received"})
+        return jsonify({"error": "No PDF uploaded"})
 
     file = request.files["pdf"]
 
-    if file.filename == "":
-        return jsonify({"error": "No file selected"})
+    path = os.path.join(UPLOAD_FOLDER, file.filename)
+    file.save(path)
 
-    text = ""
+    text = extract_text_from_pdf(path)
 
-    try:
-        with pdfplumber.open(file) as pdf:
-            for page in pdf.pages:
-                page_text = page.extract_text()
-                if page_text:
-                    text += page_text + "\n"
-    except Exception:
-        return jsonify({"error": "Failed to read PDF"})
+    pdf_chunks = split_text(text)
 
-    if text.strip() == "":
-        return jsonify({"error": "PDF has no readable text"})
+    create_vector_store(pdf_chunks)
 
-    document_text = text
-    return jsonify({"status": "PDF uploaded successfully"})
+    return jsonify({"status": "PDF uploaded and processed successfully"})
 
-# ---------------- ASK QUESTION ----------------
+
+# ===============================
+# ASK QUESTION API
+# ===============================
+
 @app.route("/ask", methods=["POST"])
 def ask_question():
-    global document_text, qa_history
 
-    if document_text.strip() == "":
-        return jsonify({"answer": "Please upload a PDF first."})
+    data = request.json
+    question = data.get("question")
 
-    data = request.get_json()
-    question = data.get("question", "").lower()
+    answer = search_pdf(question)
 
-    # Split into sentences
-    sentences = [s.strip() for s in document_text.split(".") if len(s.strip()) > 30]
-
-    # ---------- SUMMARIZE ----------
-    if "summary" in question or "summarize" in question:
-        summary = " ".join(sentences[:10])
-        qa_history.append({"question": question, "answer": summary})
-        return jsonify({"answer": summary})
-
-    # ---------- GENERATE QUESTIONS ----------
-    if "generate question" in question or "practice question" in question:
-        questions = []
-        for s in sentences[:20]:
-            words = s.split()
-            if len(words) > 8:
-                q = "What is meant by " + " ".join(words[:6]) + "?"
-                questions.append(q)
-
-        result = "\n".join(questions[:8])
-        qa_history.append({"question": question, "answer": result})
-        return jsonify({"answer": result})
-
-    # ---------- EXPLAIN CONCEPT ----------
-    if "explain" in question or "concept" in question:
-        vectorizer = TfidfVectorizer()
-        vectors = vectorizer.fit_transform(sentences + [question])
-        similarity = cosine_similarity(vectors[-1], vectors[:-1])
-        top_indexes = similarity.argsort()[0][-5:]
-
-        explanation = " ".join([sentences[i] for i in top_indexes])
-        qa_history.append({"question": question, "answer": explanation})
-        return jsonify({"answer": explanation})
-
-    # ---------- NORMAL QUESTION ANSWER ----------
-    vectorizer = TfidfVectorizer()
-    vectors = vectorizer.fit_transform(sentences + [question])
-    similarity = cosine_similarity(vectors[-1], vectors[:-1])
-    best_match = similarity.argmax()
-
-    answer = sentences[best_match]
-    qa_history.append({"question": question, "answer": answer})
+    qa_history.append((question, answer))
 
     return jsonify({"answer": answer})
 
 
-# ---------------- GENERATE PDF ----------------
-@app.route("/generate_pdf", methods=["GET"])
+# ===============================
+# GENERATE QUESTIONS API
+# ===============================
+
+@app.route("/generate_questions", methods=["GET"])
+def generate_questions_api():
+
+    global qa_history
+
+    generated = generate_questions(5)
+
+    for q, a in generated:
+        qa_history.append((q, a))
+
+    return jsonify({
+        "questions_answers": [
+            {"question": q, "answer": a} for q, a in generated
+        ]
+    })
+
+
+# ===============================
+# DOWNLOAD Q&A PDF
+# ===============================
+
+@app.route("/generate_pdf")
 def generate_pdf():
-    file_path = "Exam_QA_Report.pdf"
-    pdf = canvas.Canvas(file_path, pagesize=A4)
 
-    width, height = A4
-    y = height - 50
+    path = "qa_output.pdf"
 
-    pdf.setFont("Helvetica-Bold", 16)
-    pdf.drawString(50, y, "AI Exam Assistant – Question Answer Report")
-    y -= 40
+    styles = getSampleStyleSheet()
+    story = []
 
-    pdf.setFont("Helvetica", 11)
+    for q, a in qa_history:
 
-    for i, qa in enumerate(qa_history, start=1):
-        if y < 100:
-            pdf.showPage()
-            y = height - 50
-            pdf.setFont("Helvetica", 11)
+        story.append(Paragraph(f"<b>Q:</b> {q}", styles["Normal"]))
+        story.append(Paragraph(f"<b>A:</b> {a}", styles["Normal"]))
+        story.append(Spacer(1, 12))
 
-        pdf.setFont("Helvetica-Bold", 11)
-        pdf.drawString(50, y, f"Q{i}: {qa['question']}")
-        y -= 18
+    doc = SimpleDocTemplate(path)
+    doc.build(story)
 
-        pdf.setFont("Helvetica", 11)
-        pdf.drawString(60, y, f"Answer: {qa['answer']}")
-        y -= 30
+    return send_file(path, as_attachment=True)
 
-    pdf.save()
-    return send_file(file_path, as_attachment=True)
+
+# ===============================
+# RUN SERVER
+# ===============================
 
 if __name__ == "__main__":
     app.run(debug=True)

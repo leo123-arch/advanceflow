@@ -838,7 +838,7 @@ $stats = mysqli_fetch_assoc($stats_query);
                     </div>
 
                     <!-- Password Change Section -->
-                    <div class="password-section">
+                    <!-- <div class="password-section">
                         <h4><i class="fas fa-lock"></i> Change Password</h4>
                         <div class="form-grid">
                             <div class="form-group">
@@ -856,7 +856,7 @@ $stats = mysqli_fetch_assoc($stats_query);
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
                     <!-- Action Buttons -->
                     <div class="action-buttons">
@@ -866,9 +866,9 @@ $stats = mysqli_fetch_assoc($stats_query);
                         <a href="faculty_dashboard.php" class="btn btn-secondary">
                             <i class="fas fa-times"></i> Cancel
                         </a>
-                        <button type="button" class="btn btn-danger" onclick="confirmDelete()">
+                        <!-- <button type="button" class="btn btn-danger" onclick="confirmDelete()">
                             <i class="fas fa-trash-alt"></i> Delete Account
-                        </button>
+                        </button> -->
                     </div>
                 </form>
             </div>

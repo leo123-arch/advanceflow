@@ -858,7 +858,7 @@
                     <button class="quick-btn" onclick="askQuickQuestion('Summarize the key points from the document')">
                         <i class="fas fa-file-alt"></i> Summarize Document
                     </button>
-                    <button class="quick-btn" onclick="askQuickQuestion('Generate practice questions from this material')">
+                    <button class="quick-btn" onclick="generateQuestions()">
                         <i class="fas fa-question-circle"></i> Generate Questions
                     </button>
                     <button class="quick-btn" onclick="askQuickQuestion('Explain the main concepts')">
@@ -1083,7 +1083,44 @@ function uploadPDF() {
 }
 
 
+function generateQuestions() {
 
+    showTyping();
+
+    fetch("http://127.0.0.1:5000/generate_questions")
+    .then(response => response.json())
+    .then(data => {
+
+        removeTyping();
+
+        console.log(data);   // debug
+
+        if (!data.questions_answers || data.questions_answers.length === 0) {
+            addMessage("bot","⚠️ Upload a PDF first.",true);
+            return;
+        }
+
+        data.questions_answers.forEach((qa,i)=>{
+
+            let msg =
+            "<b>Question "+(i+1)+"</b><br>"+
+            qa.question+
+            "<br><br><b>Answer</b><br>"+
+            qa.answer;
+
+            addMessage("bot",msg,true);
+
+        });
+
+    })
+    .catch(error => {
+
+        removeTyping();
+        console.error(error);
+        addMessage("bot","❌ Error connecting to server",true);
+
+    });
+}
         // Handle Enter key
         function handleKeyPress(event) {
             if (event.key === 'Enter') {

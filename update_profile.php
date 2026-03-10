@@ -588,7 +588,7 @@ $new_faculty_data = mysqli_fetch_assoc($updated_query);
                         <i class="fas fa-key"></i> Updated successfully
                     </div>
                 </div>
-                <?php endif; ?>
+                <?php endif; ?> 
                 
                 <div class="update-item">
                     <div class="update-label">Updated On:</div>
